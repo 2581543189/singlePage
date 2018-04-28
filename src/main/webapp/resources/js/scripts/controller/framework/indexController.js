@@ -4,7 +4,7 @@ define(['app', 'service/framework/loginService', 'service/framework/indexService
             //设置页面样式
         	commonUtil.setScroll();
         	$(window).on("resize",commonUtil.setScroll());
-        	$scope.taskPageUrl="http://dashboard2.mis.elong.com/schedule/TaskExceptionSummary?businessline=index-monitor";
+        	$scope.taskPageUrl="";
         	
         	
         	//验证是否登陆.

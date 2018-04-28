@@ -414,7 +414,7 @@ define(['app'], function (app) {
                     tagNameCn: "供应商分类",
                     tagValues: [
                         {
-                            name: "elongzhq",
+                            name: "zhq",
                             nameCn: "直签"
                         },
                         {
