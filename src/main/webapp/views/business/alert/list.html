@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="././resources/js/lib/datepicker/datepicker3.css">
+
+<style>
+
+
+</style>
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        报警
+        <small>alert</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)"><i class="fa  fa-bell-o"></i> 报警</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content" ng-controller="alertListController">
+    <form role="form" class="form-horizontal" style="">
+        <div class="box box-primary">
+            <div class="box-header with-border"></div>
+
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-xs-1 control-label"> 日期</label>
+
+                    <div class="col-xs-2">
+                        <input id="datepicker" type="text" class="form-control" ng-model="date">
+                    </div>
+                    <div class="col-xs-9">
+                        <button class="btn btn-primary" ng-click="doQuery()">查询</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="box box-primary">
+        <div class="box-header with-border"></div>
+
+        <div class="box-body">
+            <div class="form-group">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>是否订阅</th>
+                        <th>指标名称</th>
+                        <th>数据量</th>
+                        <th>报警数</th>
+                        <th>异常率</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="obj in alertList track by $index">
+                        <td style="text-align: center"><a  ng-class="{true:'fa fa-star',false:'fa fa-star-o'}[obj.subscribe]" ></a></td>
+                        <td>{{obj.indexName}}</td>
+                        <td>{{obj.totalCount}}</td>
+                        <td>{{obj.errorCount}}</td>
+                        <td>{{obj.percent}}</td>
+                        <td><a href="javascript:void(0)" ng-click="toDetail(obj.indexName)"><span class="fa fa-eye"></span>&nbsp;详情</a></td>
+                    </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<!-- /.content -->

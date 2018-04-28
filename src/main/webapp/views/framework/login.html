@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="root">
+    <link rel="stylesheet" href="././resources/js/lib/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/AdminLTE.css">
+	<style>
+	.fullScreen{
+		position: absolute;
+	    top: 0px;
+	    bottom: 0px;
+	    left: 0px;
+	    right: 0px;
+	}
+	
+	</style>
+
+</head>
+<body >
+<div class="hold-transition login-page fullScreen"  ng-controller="loginController">
+    <div class="login-box" style="font-family: 'Microsoft Yahei'">
+        <div class="login-logo">
+            <b>通用指标库 </b>
+            <span style="font-size: xx-large;">V</span>
+            <span style="font-size: x-large;margin-left: -10px;">1.0</span></a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">{{errorMessage}}</p>
+
+            <form >
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="请输入域账号" ng-model="formData.userName">
+                    <span class="fa fa-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="请输入密码" ng-model="formData.password">
+                    <span class="fa fa-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button ng-click="login()" class="btn btn-primary btn-block btn-flat">登录</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+</div>
+</body>
+</html>

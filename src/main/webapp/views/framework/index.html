@@ -1,0 +1,192 @@
+<meta charset="utf-8">
+
+<link rel="stylesheet" href="././resources/js/lib/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/font-awesome.min.css">
+<link rel="stylesheet" href="././resources/js/lib/select2/select2.css">
+<link rel="stylesheet" href="././resources/js/lib/custom/confirm/jquery-confirm.min.css">
+<link rel="stylesheet" href="././resources/js/lib/custom/loading/loading.css">
+<link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/AdminLTE.css">
+<link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="././resources/js/lib/toastr/toastr.css">
+<style>
+    .fullScreen {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+    }
+
+    .fullScreenBody {
+        position: fixed;
+        top: 50px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+    }
+    section{
+        margin-bottom: 30px;
+    }
+
+</style>
+
+<div class="fullScreen hold-transition skin-blue sidebar-mini ">
+    <div class="wrapper " ng-controller="indexController">
+
+        <header class="main-header">
+            <!-- Logo -->
+            <a ui-sref="index.welcome" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>指标库</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>通用指标库</b></span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="javascript:void(0)" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="user-image fa fa-user"></span>
+                                <span class="hidden-xs">{{user.userName}}</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a ng-click="logout()" class="btn btn-default btn-flat">退出</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Control Sidebar Toggle Button -->
+                        <li>
+                            <a href="javascript:void(0)" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- search form -->
+                <form class="sidebar-form">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="暂未开通...">
+              <span class="input-group-btn">
+                <button type="button" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+                    </div>
+                </form>
+                <!-- /.search form -->
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu">
+                    <li class="header">通用菜单</li>
+                    <li><a ui-sref="index.welcome"><i class="fa fa-home"></i> <span>首页</span></a></li>
+                    <li><a ui-sref="index.zbList"><i class="fa fa-dashboard"></i> <span>指标查询</span></a></li>
+                    <li><a ui-sref="index.zbEdit" allow-roles="SUPER_MANAGER BUSINESS_MANAGER"><i class="fa fa-files-o" ></i> <span>指标新增</span></a></li>
+                   	<li><a ui-sref="index.alertList"><i class="fa fa-envelope"></i> <span>报警查询</span></a></li>
+
+                    <li class="header" allow-roles="SUPER_MANAGER">后台管理</li>
+                    <li><a ui-sref="index.userList" allow-roles="SUPER_MANAGER"><i class="fa fa-edit"></i> <span>用户管理</span></a></li>
+
+                    <!-------------------------------------------------------------------------------->
+                    <li class="treeview" allow-roles="SUPER_MANAGER">
+                        <a href="javascript:void(0)">
+                            <i class="fa fa-wrench"></i> <span>实用工具</span>
+                            <span class="pull-right-container">
+                              <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a ui-sref="index.hbase"><i class="fa fa-database"></i> Hbase相关</a></li>
+                            <li><a href="{{taskPageUrl}}" target="_blank"><i class="fa fa-tasks"></i> 定时任务</a></li>
+                            <li><a ui-sref="index.monitorDataAnalysis"><i class="fa  fa-list-alt"></i> 数据分析</a></li>
+                        </ul>
+                    </li>
+					<li><a href="http://tech.corp.elong.com/twiki/bin/view/HOTEL/%E9%80%9A%E7%94%A8%E6%8C%87%E6%A0%87%E5%BA%93"   target="_blank"><i class="fa fa-book"></i> <span>twiki</span></a></li>
+                    <!--------------------------------------------------------------------------------->
+
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="fullScreenBody content-wrapper" ui-view>
+
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <div class="pull-right hidden-xs">
+                <b>Version</b> 2.3.8
+            </div>
+            <strong>Copyright &copy; 2017-2020 <a href="http://http://www.elong.com/">Elong</a>.</strong> All rights
+            reserved.
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Create the tabs -->
+            <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+                <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+                <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Home tab content -->
+                <div class="tab-pane" id="control-sidebar-home-tab">
+                    <h3 class="control-sidebar-heading">开发中...</h3>
+                </div>
+                <!-- /.tab-pane -->
+                <!-- Stats tab content -->
+                <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+                <!-- /.tab-pane -->
+                <!-- Settings tab content -->
+                <div class="tab-pane" id="control-sidebar-settings-tab">
+                    <div >
+                        <h3 class="control-sidebar-heading">开发中...</h3>
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Add the sidebar's background. This div must be placed
+             immediately after the control sidebar -->
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- 用于弹出confirm框 -->
+    <div id="com-alert" class="modal" style="z-index:9999;display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">Close</span></button>
+                    <h5 class="modal-title"><i class="fa fa-exclamation-circle"></i> [Title]</h5>
+                </div>
+                <div class="modal-body small">
+                    <p>[Message]</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary ok" data-dismiss="modal">[BtnOk]</button>
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">[BtnCancel]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- system modal end -->
+
+</div>
+

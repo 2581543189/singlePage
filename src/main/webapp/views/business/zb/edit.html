@@ -1,0 +1,1035 @@
+<link rel="stylesheet" href="././resources/js/lib/jquery-ui/jquery-ui.css">
+
+<style>
+    .form-horizontal .form-group {
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+
+    .modalPosition {
+        top: 100px;
+    }
+
+    .saveBtn {
+        padding: 6px 50px;
+    }
+
+    .alertDiv {
+        padding: 10px 0;
+        text-align: left;
+    }
+
+</style>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        新增&编辑
+        <small>edit</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)"><i class="fa fa-edit"></i> 新增&编辑</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content" ng-controller="zbEditController">
+    <form role="form" class="form-horizontal" style="">
+
+        <!--保存按钮-->
+        <div class="box box-primary">
+            <div class="box-footer" style="text-align: right;" ng-show="isNew==0">
+                <button type="button" class="btn btn-primary saveBtn" ng-click="saveIndex()">保存(insert)</button>
+            </div>
+            <div class="box-footer" style="text-align: right;" ng-show="isNew==-1">
+                <button type="button" class="btn btn-primary saveBtn" ng-click="updateIndex()">保存(update)</button>
+            </div>
+        </div>
+
+
+        <!--基础信息-->
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">基本信息</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+
+            <div class="box-body">
+
+
+                <div class="form-group ">
+                    <label for="nameCn" class="col-xs-2 control-label">指标名称(中文)</label>
+
+                    <div class="col-xs-4 ">
+                        <input type="text" class="form-control" id="nameCn" ng-model="obj.indexNameCn"
+                               placeholder="中文,有意义,十二个字内">
+                    </div>
+                    <label for="indexName" class="col-xs-2 control-label">指标名称(英文)</label>
+
+                    <div class="col-xs-4">
+                        <input type="text" class=" form-control" id="indexName" ng-model="obj.indexName"
+                               placeholder="英文,不重复,首字母大写" ng-disabled="isNew==-1">
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="product" class="col-xs-2 control-label">产品</label>
+
+                    <div class="col-xs-4 ">
+
+                        <select class="form-control select2 select2Normal" id="product" style="width:100%"
+                                ng-model="obj.product"
+                                ng-options="ps  as ps.product for ps in productServiceOptions"
+                                ng-change="obj.service=obj.product.services[0];resetSelect2()"
+                                >
+
+                        </select>
+                    </div>
+                    <label for="service" class="col-xs-2 control-label">服务</label>
+
+                    <div class="col-xs-4 ">
+                        <select class="form-control select2 select2Normal" id="service" style="width:100%"
+                                ng-model="obj.service"
+                                ng-options="s  as s for s in obj.product.services"
+                                >
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="baseType" class="col-xs-2 control-label">业务/技术</label>
+
+                    <div class="col-xs-4 ">
+                        <select class="form-control select2 select2Normal" id="baseType" style="width:100%"
+                                ng-model="obj.baseType"
+                                ng-options="type  as type.desc for type in baseTypeOptions"
+                                ng-change="obj.detailType=obj.baseType.list[0];resetSelect2()"
+                                >
+
+                        </select>
+                    </div>
+                    <label for="detailType" class="col-xs-2 control-label">详细分类</label>
+
+                    <div class="col-xs-4 ">
+                        <select class="form-control select2 select2Normal" id="detailType" style="width:100%"
+                                ng-model="obj.detailType"
+                                ng-options="type as type for type in obj.baseType.list"
+                                >
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dataClassify" class="col-xs-2 control-label">数据类型</label>
+
+                    <div class="col-xs-4 ">
+                        <select class="form-control select2 select2Normal" id="dataClassify" style="width:100%"
+                                ng-model="obj.dataClassify"
+                                ng-options="type as type.desc for type in dataClassifyOptions">
+
+
+                        </select>
+                    </div>
+                    <label for="dataType" class="col-xs-2 control-label">数据格式</label>
+
+                    <div class="col-xs-4 ">
+                        <select class="form-control  select2 select2Normal" id="dataType" style="width:100%"
+                                ng-model="obj.dataType"
+                                ng-options="type as type.desc for type in dataTypeOptions">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="saveDate" class="col-xs-2 control-label">保存时长(天)</label>
+
+                    <div class="col-xs-4 ">
+                        <input type="text" class="form-control" id="saveDate" placeholder="单位（天）最长180天"
+                               ng-model="obj.saveDate">
+                        <!-- <select class="form-control" id="saveDate" style="width:100%">
+
+                             <option>8天</option>
+                             <option>35天</option>
+                             <option>100天</option>
+                             <option>380天</option>
+                             <option>380天</option>
+                             <option>750天</option>
+
+
+                         </select>-->
+                    </div>
+                    <label for="dataUnit" class="col-xs-2 control-label">单位</label>
+
+                    <div class="col-xs-4 ">
+                        <select class="form-control  select2 select2Normal" id="dataUnit" style="width:100%"
+                                ng-model="obj.dataUnit"
+                                ng-options="type as type.desc for type in dataUnitOptions">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="dataUnit" class="col-xs-2 control-label">纵坐标起始值</label>
+                    <div class="col-xs-4 ">
+                        <input class="form-control" ng-model="obj.ordinate">
+
+                    </div>
+                    <div class="col-xs-6">
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <!-- /.box-body -->
+
+
+        </div>
+
+        <!--采样信息-->
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">采样信息</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="frecQuency" class="col-xs-2 control-label">采样频率</label>
+
+                    <div class="col-xs-4 ">
+                        <input type="text" class="form-control" id="frecQuency" ng-model="obj.frecQuency"
+                               placeholder="请输入Cron表达式">
+                    </div>
+                    <label for="method" class="col-xs-2 control-label">采样方式</label>
+
+                    <div class="col-xs-4 ">
+                        <select class="form-control select2 select2Normal" id="method" style="width:100%"
+                                ng-model="obj.simplingType"
+                                ng-options="type as type.desc for type in simplingTypeOptions"
+                                ng-change="resetSimplingOptions()">
+
+
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show="obj.simplingType==simplingTypeOptions[0]">
+
+                    <div class="col-xs-1">
+                        <input type="radio" ng-value="true" ng-model="obj.isSoa" style="float: right;"
+                               ng-change="resetSoaAndUrl()" style="float: right;" name="isSoa">
+                    </div>
+                    <label for="soa1" class="col-xs-1 control-label">
+                        SOA坐标
+                    </label>
+
+                    <div class="col-xs-10">
+                        <div class="form-group">
+                            <div class="col-xs-4 ">
+                                <input type="text" class="form-control" id="soa1" placeholder="产品线"
+                                       ng-disabled="!obj.isSoa" ng-model="obj.soa.product">
+                            </div>
+
+                            <div class="col-xs-4 ">
+                                <input type="text" class="form-control" id="soa2" placeholder="服务线"
+                                       ng-disabled="!obj.isSoa" ng-model="obj.soa.service">
+                            </div>
+                            <div class="col-xs-4 ">
+                                <input type="text" class="form-control" id="soa3" placeholder="方法名"
+                                       ng-disabled="!obj.isSoa" ng-model="obj.soa.method">
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+                <div class="form-group" ng-show="obj.simplingType==simplingTypeOptions[0]">
+                    <div class="col-xs-1">
+                        <input type="radio" ng-value="false" ng-model="obj.isSoa" style="float: right;"
+                               ng-change="resetSoaAndUrl()" style="float: right;" name="isSoa">
+                    </div>
+                    <label for="url" class="col-xs-1 control-label">url</label>
+
+                    <div class="col-xs-6 ">
+                        <input type="text" class="form-control" id="url" placeholder="请输入URL" ng-disabled="obj.isSoa"
+                               ng-model="obj.url">
+                    </div>
+                    <label class="col-xs-2 control-label">超时时间(ms)</label>
+
+                    <div class="col-xs-2 ">
+                        <input type="text" class="form-control" placeholder="单位ms"
+                               ng-model="obj.timeOut">
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!--标签&标签组信息-->
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">标签&标签组</h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">可用标签</label>
+
+                    <div class="col-xs-10">
+                        <button type="button" class="btn btn-primary" ng-click="showTagSelectModal()" id="tagSelectBtn">
+                            添加标签
+                        </button>
+                        <a href="javascript:void(0)" style="padding-left: 10px;" ng-click="showIntfExample()"><span
+                                class="fa  fa-commenting-o"></span>查看接口数据样例</a>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group" style="margin:0 10%">
+                    <table class="table table-hover table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>中文含义</th>
+                            <th>英文名称</th>
+                            <th>操作</th>
+                        </tr>
+
+                        <tr ng-repeat="item in obj.indexTagDetails track by $index">
+                            <td>{{item.tagNameCn}}</td>
+                            <td>{{item.tagName}}</td>
+                            <td>
+                                <a class="glyphicon glyphicon-minus-sign" title="删除"
+                                   ng-click="deleteOneTag($index)"></a>
+                                <a class="glyphicon glyphicon-eye-open" data-toggle="popover" data-html="true"
+                                   data-placement="top"
+                                   data-content="{{initTable($index)}}" title="标签取值"
+                                   ng-mouseenter="popoverShow($event)"
+                                   ng-mouseleave="popoverHide($event)"></a>
+
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">
+                        <a ng-click="mtShowToggle()"
+                           ng-class="{true: 'fa fa-eye', false: 'fa fa-eye-slash'}[mtShow]"></a>&nbsp;&nbsp;标签组合
+                    </label>
+
+                    <div class="col-xs-10" ng-show="mtShow">
+                        <button type="button" class="btn btn-primary" ng-click="showTagMergeModal()" id="tagSelectBtn">
+                            添加标签组合
+                        </button>
+                        <a class="fa fa-info-circle"></a>&nbsp;&nbsp;标签组合有先后顺序，请将查询使用更频繁的标签排在组合的前边&nbsp;&nbsp;<a
+                            class="fa fa-info-circle"></a>
+                    </div>
+
+
+                </div>
+
+                <div class="form-group" style="margin:0 10%" ng-show="mtShow">
+
+                    <table class="table table-hover table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>组合描述(中文)</th>
+                            <th>组合描述(英文)</th>
+                            <th>操作</th>
+                        </tr>
+                        <tr ng-repeat="merged in obj.mergedTags track by $index" ng-init="outIndex = $index">
+                            <td>
+                                <span ng-repeat="tag1 in merged track by $index" ng-init="tag1Index = $index">
+
+                                    <span class="badge">{{tag1.tagNameCn}}</span> <a class="fa fa-plus"
+                                                                                     ng-show="tag1Index!=merged.length-1"></a>
+                                </span>
+
+                            </td>
+                            <td>
+                                <span ng-repeat="tag2 in merged track by $index" ng-init="tag2index = $index">
+
+                                    <span class="badge">{{tag2.tagName}}</span> <a class="fa fa-plus"
+                                                                                   ng-show="tag2index!=merged.length-1"></a>
+                                </span>
+
+                            </td>
+                            <td><a class="glyphicon glyphicon-minus-sign" ng-click="removeOneMerge(outIndex)"></a></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <!--报警信息信息-->
+        <div class="box box-primary" style="padding-bottom: 30px;">
+            <div class="box-header with-border">
+                <h3 class="box-title">报警信息</h3>
+            </div>
+            <div class="box-body">
+
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">wiki地址</label>
+
+                    <div class="col-xs-8">
+                        <input class="form-control" placeholder="请输入..." ng-model="obj.wikiUrl"> </input>
+
+                    </div>
+                    <div class="col-xs-2">
+                        <a target="_blank" href="{{obj.wikiUrl}}" ng-show="obj.wikiUrl.length > 0"> <span
+                                class="glyphicon glyphicon-new-window"></span>&nbsp;前往</a>
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">报警文案</label>
+
+                    <div class="col-xs-8">
+                        <textarea class="form-control" placeholder="请输入..." ng-model="obj.alertDesc">
+
+
+                        </textarea>
+
+                    </div>
+                    <div class="col-xs-2">
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">报警规则</label>
+
+                    <div class="col-xs-10">
+
+                        <button type="button" class="btn btn-primary" ng-click="addOneAlert()">
+                            添加规则
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin:0px 10%">
+
+                    <div class="col-xs-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <!--<th>标签</th>-->
+                                <th>取值</th>
+                                <th>规则</th>
+                                <th>报警组</th>
+                                <th>操作</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+                            <tr ng-repeat="temp in obj.indexAlertDetails track by $index">
+                                <td>{{temp.startTime}} - {{temp.endTime}}</td>
+                                <td>{{temp.type.desc}}</td>
+                                <!--<td>{{temp.tag.tagNameCn}}</td>-->
+                                <td>
+                                    {{temp.params.length}}个
+                                    <a class="glyphicon glyphicon-eye-open" data-toggle="popover" data-html="true"
+                                       data-placement="top"
+                                       data-content="{{alertValuesHtmls($index)}}" title="values"
+                                       ng-mouseenter="popoverShow($event)"
+                                       ng-mouseleave="popoverHide($event)"></a>
+                                </td>
+                                <td ng-bind="alertDesc({{$index}})"></td>
+                                <td>{{temp.alertName}}</td>
+                                <td>
+                                    <a class="fa fa-edit" ng-click="updateOneAlert($index)"></a>
+                                    <a class="fa fa-remove" ng-click="doDeleteOneAlert($index)"></a>
+
+                                </td>
+                            </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </form>
+    <!-- 新增标签的弹窗 -->
+    <div class="modal " id="tagSelectModal">
+        <div class="modal-dialog">
+            <div class="modal-content modalPosition">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">请选择标签</h4>
+                </div>
+                <div class="modal-body">
+                    <a class="fa fa-info-circle"></a>&nbsp;&nbsp;
+                    你可以选择系统预定义的标签，或者定义自己的标签，添加到指标中使用,自定义标签是临时信息，如果未保存在指标中，刷新页面后数据丢失
+                    &nbsp;&nbsp;<a class="fa fa-info-circle"></a>
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-primary" ng-click="showTagAddModal()">自定义<span
+                                        class="glyphicon glyphicon-plus-sign"></span>
+                                </button>
+                            </div>
+                            <div class="col-xs-6">
+
+                                <select class="form-control select2 select2Normal"
+                                        ng-options="tag as tag.tagNameCn for tag in defaultTags" ng-model="toAddTag"
+                                        id="toAddTagSelect">
+
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-primary" ng-click="doAddOneTag()">添加标签到指标</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                标签取值列表如下(无先后顺序)<a class="glyphicon glyphicon-plus-sign"
+                                                  ng-click="showTagValueAddModal()"></a>
+                                <a class="fa fa-hand-o-left"></a>点击+号添加标签取值&nbsp;&nbsp; <a
+									class="glyphicon glyphicon-file"
+									ng-click="showTagValuesAddModal()"></a><a
+									class="fa fa-hand-o-left"></a>点击上传文件
+                            </p>
+                        </div>
+
+                        <div class="form-group" style="max-height: 200px;overflow: auto;" id="tag_val_div">
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <th>中文含义</th>
+                                        <th>英文名称</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    <tr ng-repeat="item in toAddTag.tagValues track by $index">
+                                        <td>{{item.nameCn}}</td>
+                                        <td>{{item.name}}</td>
+                                        <td><a class="glyphicon glyphicon-minus-sign"
+                                               ng-click="deleteOneTagVal($index)"></a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    <!-- 新增自定义标签的弹窗 -->
+    <div class="modal " id="tagAddModal">
+        <div class="modal-dialog">
+            <div class="modal-content modalPosition">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"
+                              ng-click="$scope.nameModel = {name: '',nameCn:'',nameModel:'新增标签值'}">×</span></button>
+                    <h4 class="modal-title">自定义标签</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="tempTagName" class="col-xs-2 control-label">描述</label>
+
+                            <div class="col-xs-4">
+                                <input type="text" class=" form-control" id="tempTagName" placeholder="中文名"
+                                       ng-model="nameModel.nameCn">
+                            </div>
+                            <label for="tempTagNameEn" class="col-xs-2 control-label">英文名</label>
+
+                            <div class="col-xs-4">
+                                <input type="text" class=" form-control" id="tempTagNameEn" placeholder="英文名"
+                                       ng-model="nameModel.name">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="doAddOneTagValOrTag()">{{nameModel.type}}
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+	<!-- 新增上传自定义标签文件弹窗 -->
+	<input type="file" id="FileInput" hidden="hidden"
+		style="display: none;" ng-change="readfls()" ng-model="fileName" />
+	<div class="modal" id="tagValuesAddModal">
+		<div class="modal-dialog">
+			<div class="modal-content modalPosition">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title">自定义标签</h4>
+				</div>
+				<div class="modal-body">
+				 <a class="fa fa-info-circle"></a>&nbsp;&nbsp;
+                    文件后缀必须以.xlsx结尾且只有两列,列名必须为nameCn,name
+                    &nbsp;&nbsp;<a class="fa fa-info-circle"></a>
+					<div id="app">
+						<div class="nav-bar">
+							<div class="btn-toolbar" role="toolbar">
+								<div class="input-group" style="width: 451px;"
+									onclick="$('#FileInput').click()">
+									<span class="input-group-btn">
+										<button class="btn btn-info" type="button">
+											<i class="glyphicon glyphicon-folder-open"></i>选择文件
+										</button>
+									</span> <input type="text" class="form-control" placeholder="请选择文件"
+										readonly="readonly" ng-model="fileInfo.name">
+								</div>
+								<div class="input-group" style="width: 101px;">
+									<span class="input-group-btn"
+										style="font-size: 10px; line-height: 30px;">
+										{{'文件大小:'+fileInfo.size+'b'}} </span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="demo" style="overflow: auto;"
+						ng-if="tableDemo.tbody.length>0">
+						<table class="table table-bordered" style="min-width: 100%;">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th ng-repeat="i in tableDemo.thead"> {{i}}</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="i in tableDemo.tbody track by $index">
+									<th scope="row">{{$index}}</th>
+                					<!-- <td ng-repeat="j in tableDemo.thead">{{i[j]}}</td> -->
+                					<td>{{i.nameCn}}</td>
+                					<td>{{i.name}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer"  style="display: none;">
+					<button type="button" class="btn btn-primary" ng-click="doAddTagValues()">上传标签文件</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <!-- 标签组合弹窗 -->
+    <div class="modal " id="tagMergeModal">
+        <div class="modal-dialog">
+            <div class="modal-content modalPosition">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">标签组合</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <a class="fa fa-info-circle"></a>&nbsp;&nbsp;标签组合有先后顺序，请将查询使用更频繁的标签排在组合的前边&nbsp;&nbsp;<a
+                                class="fa fa-info-circle"></a>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="tempTagName" class="col-xs-2 control-label">选择标签</label>
+
+                            <div class="col-xs-8">
+                                <select class="form-control select2 select2Normal"
+                                        ng-options="tag as tag.tagNameCn for tag in obj.indexTagDetails"
+                                        ng-model="tempMergeTag" id="tempMergeTagSelect">
+
+                                </select>
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-primary" ng-click="mergeTag()">加入组合</button>
+                            </div>
+                        </div>
+                        <div class="form-group" style="padding:0 10%">
+                            <div class="col-xs-2"></div>
+                            <div class="col-xs-8" style="text-align: center">
+                                <span ng-repeat=" tag in tempMergeTags track by $index">
+                                    <span class="badge">{{tag.tagNameCn}}({{tag.tagName}})</span>
+                                    <a class="fa fa-plus" ng-show="$index!=tempMergeTags.length-1"></a>
+                                </span>
+
+
+                            </div>
+                            <div class="col-xs-2"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="addMergeTag()">添加组合</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    <!-- 接口样例弹窗 -->
+    <div class="modal " id="intfExampleModal">
+        <div class="modal-dialog">
+            <div class="modal-content modalPosition">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">数据示例</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            {{intfExample.desc}}
+                        </div>
+                        <div class="form-group" style="max-height: 250px;overflow: auto;" id="intf_example_val_div">
+                            <textarea class="form-control" ng-model="intfExample.jsonStr"
+                                      style="min-height: 200px;"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    <!-- 报警信息弹窗 -->
+    <!-- 报警信息弹窗 -->
+    <div class="modal " id="AlertInfoModal">
+        <div class="modal-dialog" style="width:730px;">
+            <div class="modal-content modalPosition" id="AlertInfoModal_body">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"  >
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">{{alertTemp.operation}}报警</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <!--时间信息-->
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">类型</label>
+                            <div class="col-xs-3">
+                                <select ng-model="alertTemp.type" class="form-control select2 select2Normal tagAlertSelect"
+                                        ng-options="obj as obj.desc for obj in alertTypeOptions" style="width: 100%"
+                                        ng-change="alertTemp.compareType=compareTypeOptions[0];alertTemp.threshold=['',''];alertTemp.relativeType=relativeTypeOptions[0];resetAlertSelect2()">
+                                </select>
+
+                            </div>
+                            <label class="control-label col-xs-1">
+                                时间
+                            </label>
+                            <div class="col-xs-2">
+                                <input ng-model="alertTemp.startTime" class="form-control"/>
+
+                            </div>
+                            <label class="control-label col-xs-1">时 -</label>
+                            <div class="col-xs-2">
+                                <input ng-model="alertTemp.endTime" class="form-control">
+
+                            </div>
+                            <label class="control-label col-xs-1" style="text-align: left">时</label>
+                            <a  data-toggle="popover" data-placement="top" data-html="true"  style="position: relative;top: -20px;"
+                                data-content="在这个时间范围内提交或者拉取的指标数据，异常时会根据配置值发送报警。若配置为[8,24]，早上8:00-晚上24:00会发送报警，凌晨1点数据异常也不报警，[0,0]表示全天报警">
+                                <span class="fa fa-info-circle"></span>
+                            </a>
+
+                        </div>
+
+                        <!--标签信息-->
+                        <!--<div class="form-group">
+                            <label class="control-label col-xs-2">标签</label>
+                            <div class="col-xs-3">
+                                <select class="form-control select2 select2Normal" ng-model="alertTemp.tag"
+                                        ng-options="theTag as theTag.tagNameCn for theTag in obj.indexTagDetails"
+                                        ng-change="alertTemp.tagValues=alertTemp.tag.tagValues;resetAlertSelect2();"
+                                        style="width: 100%">
+                                </select>
+
+                            </div>
+                            <label class="control-label col-xs-1">取值</label>
+                            <div class="col-xs-5">
+                                <select class="form-control select2 select2Multiple"
+                                        ng-model="alertTemp.tagValues" multiple="multiple"
+                                        ng-options=" value as value.name for value in alertTemp.tag.tagValues"
+                                        style="width: 100%">
+                                </select>
+
+                            </div>
+                            <div class="col-xs-1" style="padding:7px 7px">
+                                <button class="form-control btn-sm btn-primary " ng-click="alertTemp.tagValues=alertTemp.tag.tagValues;resetAlertSelect2();">全选</button>
+                            </div>
+
+                        </div>-->
+
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">取值</label>
+                            <div class="col-xs-10">
+                                <button class="btn btn-primary" ng-click="showTempAlertParamsModal()">新增取值或取值组合</button>
+                                <button class="btn btn-primary" ng-click="clearAlertTempParams()">清空(共{{alertTemp.params.length}}条)</button>
+                            </div>
+
+
+                        </div>
+
+                        <div class="form-group" style="max-height: 122px;overflow: hidden;width: 80%; margin:0px auto 15px auto; border:1px solid #d2d6de;" >
+                            <div id="alert_val_div" style="max-height: 120px;overflow: hidden; width:100%">
+                                <ul>
+                                    <li ng-repeat="obj in alertTemp.params track by $index">{{obj}}</li>
+
+                                </ul>
+
+                            </div>
+
+
+                        </div>
+
+                        <!--绝对数据信息信息-->
+                        <div class="form-group" ng-show="alertTemp.type.code == 0">
+                            <label class="control-label col-xs-2">数据</label>
+                            <div class="col-xs-4">
+                                取最近
+                                <input class="form-control" type="text" style="width:30%;display: inline;" ng-model="alertTemp.timeWindow">
+                                分钟数据
+                                <a  data-toggle="popover" data-placement="top" data-html="true" data-content="若为0,则不进行数据聚合阈值判断">
+                                    <span class="fa fa-info-circle"></span>
+                                </a>
+                            </div>
+                            <div class="col-xs-2" ng-show="alertTemp.timeWindow!='0'">
+                                <select class="select2 select2Normal form-control"
+                                        ng-options=" type as type.desc for type in alertDataTypeOptions"
+                                        ng-model="alertTemp.alertDataType" >
+
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+
+                            </div>
+
+                        </div>
+                        <!--相对数据信息信息-->
+                        <div class="form-group" ng-show="alertTemp.type.code != 0">
+                            <label class="control-label col-xs-2">数据</label>
+                            <div class="col-xs-4">
+                                取最近
+                                <input class="form-control" type="text"  style="width:30%;display: inline;"ng-model="alertTemp.timeWindow">
+                                分钟数据
+                                <a  data-toggle="popover" data-placement="top" data-html="true" data-content="若为0,则不进行数据聚合阈值判断">
+                                    <span class="fa fa-info-circle"></span>
+                                </a>
+
+                            </div>
+
+                            <div class="col-xs-2" ng-show="alertTemp.timeWindow !='0'">
+                                <select class="select2 select2Normal form-control"
+                                        ng-options=" type as type.desc for type in alertDataTypeOptions"
+                                        ng-model="alertTemp.alertDataType" >
+
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                与
+                                <select class="select2 select2Normal form-control" style="width:60%;display: inline;"
+                                        ng-options=" type as type.desc for type in relativeTypeOptions"
+                                        ng-model="alertTemp.relativeType">
+
+                                </select>
+                                比较
+                            </div>
+                        </div>
+
+
+                        <!--绝对阈值信息信息-->
+                        <div class="form-group" ng-show="alertTemp.type.code == 0">
+                            <label class="control-label col-xs-2">阈值</label>
+                            <div class="col-xs-3">
+                                <select class="form-control select2 select2Normal" ng-model="alertTemp.compareType"
+                                        ng-options=" type as type.desc for type in compareTypeOptions"
+                                        ng-change="alertTemp.threshold=['','']";
+                                        style="width: 100%">
+
+                                </select>
+
+                            </div>
+                            <label class="control-label col-xs-1"> </label>
+                            <div class="col-xs-2">
+                                <input class="form-control" ng-model="alertTemp.threshold[0]">
+
+                            </div>
+                            <label class="control-label col-xs-1">
+                                -
+                            </label>
+                            <div class="col-xs-2">
+                                <input class="form-control" ng-model="alertTemp.threshold[1]" ng-disabled="alertTemp.compareType.desc!='区间'">
+
+                            </div>
+                            <label class="control-label col-xs-1">
+
+                            </label>
+                        </div>
+
+                        <!--相对阈值信息信息-->
+                        <div class="form-group" ng-show="alertTemp.type.code != 0">
+                            <label class="control-label col-xs-2">阈值</label>
+                            <div class="col-xs-3">
+                                <select class="form-control select2 select2Normal" ng-model="alertTemp.compareType"
+                                        ng-options=" type as type.desc for type in compareTypeOptions"
+                                        ng-change="alertTemp.threshold=['','']";
+                                        style="width: 100%">
+
+                                </select>
+
+
+                            </div>
+                            <label class="control-label col-xs-1">
+                                <!-- <a  data-toggle="popover" data-placement="top" data-html="true" data-content="取历史七天平均值">
+                                     <span class="fa fa-info-circle"></span>
+                                 </a>-->
+                            </label>
+
+
+                            <div class="col-xs-2">
+                                <input class="form-control" ng-model="alertTemp.threshold[0]">
+
+                            </div>
+                            <label class="control-label col-xs-1">
+                                % -
+                            </label>
+                            <div class="col-xs-2">
+                                <input class="form-control" ng-model="alertTemp.threshold[1]" ng-disabled="alertTemp.compareType.desc!='区间'">
+
+                            </div>
+                            <label class="control-label col-xs-1">
+                                %
+                            </label>
+
+                        </div>
+
+                        <!--报警组名称-->
+                        <div class="form-group">
+                            <label class="control-label col-xs-2">报警组名称</label>
+                            <div class="col-xs-9">
+                                <input class="form-control" ng-model="alertTemp.alertName">
+                            </div>
+                            <div class="col-xs-1">
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="doUpdateOneAlert()" ng-show='alertTemp.operation=="更新"'>更新</button>
+                    <button class="btn btn-primary" ng-click="doAddOneAlert()"  ng-show='alertTemp.operation=="新增"'>新增</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    <!-- 报警条件选择弹框 -->
+    <div class="modal " id="tempAlertParamsModal">
+        <div class="modal-dialog" style="width:750px;">
+            <div class="modal-content modalPosition">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">组合标签</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        <div class="form-group">
+                            <a class="fa fa-info-circle"></a>
+                            &nbsp;&nbsp;请删除不需要的标签和标签取值,剩余取值进行笛卡尔积以后作为报警条件&nbsp;&nbsp;
+                            <a class="fa fa-info-circle"></a>
+                            <button class="btn btn-primary" ng-click="resetTempAlertParamsBtn()">重置</button>
+
+                        </div>
+
+
+                        <div class="form-group" ng-repeat="tag in tempAlertParams.tags track by $index">
+                            <label class="col-xs-2 control-label">{{tag.tagName}}取值:</label>
+
+                            <div class="col-xs-8">
+                                <select class="form-control select2 select2Multiple" multiple="multiple"
+                                        ng-model="tempAlertParams.tags[$index].choose"
+                                        ng-options="val as val.nameCn for val in tempAlertParams.tags[$index].tagValues"
+                                        style="width:100%"
+                                        ng-change="selectChange($index)">
+
+
+                                </select>
+
+                            </div>
+                            <div class="col-xs-2">
+                                <button class="btn btn-primary" ng-click="selectAll($index)">全选</button>
+                                <!--<a class="glyphicon glyphicon-minus-sign" ng-click="minusOneTagInTempAlertParams($index)"></a>-->
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="doAddAlertParams()">添加
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+</section>
+<!-- /.content -->

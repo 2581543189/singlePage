@@ -1,0 +1,267 @@
+<meta charset="utf-8">
+
+<link rel="stylesheet" href="././resources/js/lib/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/font-awesome.min.css">
+<link rel="stylesheet" href="././resources/js/lib/select2/select2.css">
+<link rel="stylesheet" href="././resources/js/lib/custom/confirm/jquery-confirm.min.css">
+<link rel="stylesheet" href="././resources/js/lib/custom/loading/loading.css">
+<link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/AdminLTE.css">
+<link rel="stylesheet" href="././resources/js/lib/AdminLTE-2.3.11/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="././resources/js/lib/toastr/toastr.css">
+<style>
+    .fullScreen {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        
+    }
+
+    .fullScreenBody {
+        position: fixed;
+        top: 50px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+    }
+    ul{
+        list-style: none;
+        padding-left:0px;
+    }
+
+    .home{
+    position: absolute;
+        right: 10px;
+    }
+    .highcharDiv{
+    width:100%;
+    height:250px;
+    }
+    
+    .enLargeDiv{
+    width:100%;
+    min-height:500px;
+    }
+    .littleMenu{
+        float:right
+    }
+    .littleMenu a{
+        padding:0px 5px;
+    }
+
+</style>
+
+<div class="fullScreen layout-top-nav skin-blue" ng-controller="myDashboardController">
+    <div class="wrapper">
+
+        <header class="main-header">
+            <nav class="navbar navbar-static-top">
+                <div class="container" style="width:100%">
+                    <div class="navbar-header">
+                        <a   class="navbar-brand"><b>我的面板</b></a>
+
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li ng-class="isActive($index)" ng-repeat="obj in groups track by $index">
+                                <a href="javascript:void(0)" ng-click="changeCurrentGroup($index)">{{obj.name}}</a>
+                            </li>
+                        </ul>
+                        <div class="navbar-form navbar-left" role="search">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="navbar-search-input" placeholder="搜索功能暂未实现">
+                            </div>
+                        </div>
+                        <ul class="nav navbar-nav home">
+                            <li ng-show="!isEnLarge"><a  title="保存当前面板修改" ng-click="saveCurrentGroup()"><span class="fa fa-save"></span></a></li>
+                            <li ><a  title="手动刷新" ng-click="getSubsctibed()"><span class="fa fa-refresh"></span></a></li>
+                            <li ><a ng-click="changeRefresh()" title="自动刷新"><span ng-class="{true:'fa fa-toggle-on',false:'fa fa-toggle-off'}[refresh]"></span>{{countdown}}s</a></li>
+                            <li ><a ui-sref="index" title="首页"><span class="fa fa-home"></span></a></li>
+                        </ul>
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!-- /.container-fluid -->
+            </nav>
+        </header>
+        <!-- Full Width Column -->
+        <div class="content-wrapper">
+            <div class="container fullScreenBody"  style="width:100%">
+
+                <!-- Main content -->
+                <section class="content " >
+                    <div class="row" ng-show="!isEnLarge">
+                        <div class="col-xs-4">
+                         
+                            <ul ui-sortable="sortableOptions" class="connectedSortable" ng-model="array1">
+                                <li ng-repeat="obj in array1 track by $index" >
+                                    <div class="box box-primary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">{{obj.desc}}&nbsp;&nbsp;({{obj.indexBaseInfoVo.indexNameCn}})</h3>
+                                            <div class="littleMenu" >
+                                                <a class="fa  fa-search-plus" href="javascript:void(0)" title="放大" ng-click="enLarge('1',$index)"></a>
+                                                <a class="fa  fa-object-group" href="javascript:void(0)" title="修改分组" ng-click="editGroup('1',$index)"></a>
+                                                <a class="fa fa-plus" href="javascript:void(0)" title="新增y轴标线" ng-click="addYPlot('1',$index)"></a>
+                                                <a class="fa fa-minus" href="javascript:void(0)" title="删除所有标线"  ng-click="removeYPlot('1',$index)"></a>
+                                                <a class="fa fa-edit" href="javascript:void(0)" title="修改描述"  ng-click="updateDesc('1',$index)"></a>
+                                                <a class="fa fa-close"  href="javascript:void(0)" title="删除" ng-click="deleteOneById(obj.id)"></a>
+                                            </div>
+
+                                        </div>
+                                        <!-- /.box-header -->
+                                            <div class="box-body">
+                                                <div class="form-group" >
+                                                    <div id="{{obj.elentmentId}}" class="highcharDiv"></div>
+                                                </div>
+
+                                            </div>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="col-xs-4">
+                      
+                            <ul ui-sortable="sortableOptions" class="connectedSortable"  ng-model="array2">
+                                <li ng-repeat="obj in array2 track by $index" >
+                                    <div class="box box-primary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">{{obj.desc}}&nbsp;&nbsp;({{obj.indexBaseInfoVo.indexNameCn}})</h3>
+                                            <div class="littleMenu" >
+                                                <a class="fa  fa-search-plus" href="javascript:void(0)" title="放大" ng-click="enLarge('2',$index)"></a>
+                                                <a class="fa  fa-object-group" href="javascript:void(0)" title="修改分组" ng-click="editGroup('2',$index)"></a>
+                                                <a class="fa fa-plus" href="javascript:void(0)" title="新增y轴标线" ng-click="addYPlot('2',$index)"></a>
+                                                <a class="fa fa-minus" href="javascript:void(0)" title="删除所有标线"  ng-click="removeYPlot('2',$index)"></a>
+                                                <a class="fa fa-edit" href="javascript:void(0)" title="修改描述"  ng-click="updateDesc('2',$index)"></a>
+                                                <a class="fa fa-close"  href="javascript:void(0)" title="删除" ng-click="deleteOneById(obj.id)"></a>
+                                            </div>
+                                        </div>
+                                        <!-- /.box-header -->
+                                        <div class="box-body">
+                                            <div class="form-group" >
+                                                <div id="{{obj.elentmentId}}" class="highcharDiv"></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-4">
+                     
+                            <ul ui-sortable="sortableOptions" class="connectedSortable"  ng-model="array3">
+                                <li ng-repeat="obj in array3 track by $index" >
+                                    <div class="box box-primary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">{{obj.desc}}&nbsp;&nbsp;({{obj.indexBaseInfoVo.indexNameCn}})</h3>
+                                            <div class="littleMenu" >
+                                                <a class="fa  fa-search-plus" href="javascript:void(0)" title="放大" ng-click="enLarge('3',$index)"></a>
+                                                <a class="fa  fa-object-group" href="javascript:void(0)" title="修改分组" ng-click="editGroup('3',$index)"></a>
+                                                <a class="fa fa-plus" href="javascript:void(0)" title="新增y轴标线" ng-click="addYPlot('3',$index)"></a>
+                                                <a class="fa fa-minus" href="javascript:void(0)" title="删除所有标线"  ng-click="removeYPlot('3',$index)"></a>
+                                                <a class="fa fa-edit" href="javascript:void(0)" title="修改描述"  ng-click="updateDesc('3',$index)"></a>
+                                                <a class="fa fa-close"  href="javascript:void(0)" title="删除" ng-click="deleteOneById(obj.id)"></a>
+                                            </div>
+                                        </div>
+                                        <!-- /.box-header -->
+                                        <div class="box-body">
+                                            <div class="form-group">
+                                                <div id="{{obj.elentmentId}}" class="highcharDiv"></div>
+	
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- 放大后的曲线图-->
+                    <div class="row" ng-show="isEnLarge">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{{enLargeObj.desc}}&nbsp;&nbsp;({{enLargeObj.indexBaseInfoVo.indexNameCn}})</h3>
+                                <div class="littleMenu" >
+                                    <a class="fa  fa-search-minus" href="javascript:void(0)" title="缩小" ng-click="narrow()"></a>
+                                </div>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div id="enLarge" class="enLargeDiv"></div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.container -->
+        </div>
+        <!-- /.content-wrapper -->
+
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- 新增自定义标签的弹窗 -->
+    <div class="modal " id="tempModal">
+        <div class="modal-dialog">
+            <div class="modal-content modalPosition">
+                <div class="modal-header">
+                    {{temp.title}}
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"
+                              ng-click="resetTemp()">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">{{temp.desc}}:</label>
+
+                            <div class="col-xs-9">
+                                <input type="text" class=" form-control"  ng-model="temp.value"/>
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="doCallBack()">确认</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    <!-- 用于弹出confirm框 -->
+    <div id="com-alert" class="modal" style="z-index:9999;display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">Close</span></button>
+                    <h5 class="modal-title"><i class="fa fa-exclamation-circle"></i> [Title]</h5>
+                </div>
+                <div class="modal-body small">
+                    <p>[Message]</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary ok" data-dismiss="modal">[BtnOk]</button>
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">[BtnCancel]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- system modal end -->
+
+</div>

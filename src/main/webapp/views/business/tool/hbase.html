@@ -1,0 +1,144 @@
+<style>
+.tab-pane{
+min-height:500px;
+}
+
+</style>
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        HBASE
+        <small>hbase</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)"><i class="fa  fa-wrench"></i> 实用工具</a></li>
+        <li><a href="javascript:void(0)"><i class="fa  fa-database"></i>hbase</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content" ng-controller="hbaseController">
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs" id="myTab">
+            <li class="active"><a href="/#tab_1" data-toggle="tab" aria-expanded="true">rowkey查询</a></li>
+            <li class=""><a href="/#tab_2" data-toggle="tab" aria-expanded="false">前缀匹配</a></li>
+            <li class=""><a href="/#tab_3" data-toggle="tab" aria-expanded="false">正则+前缀</a></li>
+            <li class=""><a href="/#tab_4" data-toggle="tab" aria-expanded="false">hbase表名</a></li>
+            <li class="pull-right"><a href="javascript:void(0)" class="text-muted"><i class="fa fa-gear"></i></a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                <form role="form">
+
+                    <div class="form-group">
+                        <button class="form-control btn btn-primary" style="width:100px" ng-click="queryByRowkey()"> 查询</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">表名:</label>
+                        <input class="form-control" type="text" ng-model="tableName" placeholder="请输入表名">
+                        <label class="control-label">rowkey:</label>
+                        <input class="form-control" type="text" ng-model="tab1.rowkey" placeholder="rowkey">
+
+                        <label class="control-label">查询结果:</label>
+                        <textarea class="form-control"  ng-model="tab1.data">
+
+                        </textarea>
+
+                    </div>
+
+                </form>
+
+
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_2">
+                <form role="form">
+
+                    <div class="form-group">
+                        <button class="form-control btn btn-primary" style="width:100px" ng-click="randomRowkey()">{{tab2.btnName}}</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">表名:</label>
+                        <input class="form-control" type="text" ng-model="tableName" placeholder="请输入表名">
+                        <label class="control-label">前缀:</label>
+                        <input class="form-control" type="text" ng-model="tab2.seed" placeholder="请输入前缀">
+
+                        <label class="control-label">rowkey如下:</label>
+
+                        <ol>
+                            <li ng-repeat="str in tab2.data track by $index">{{str}}</li>
+                        </ol>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_3">
+                <form role="form">
+
+                    <div class="form-group">
+                        <button class="form-control btn btn-primary" style="width:100px" ng-click="queryPlus()">查询</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">表名:</label>
+                        <input class="form-control" type="text" ng-model="tableName" placeholder="请输入表名">
+                        <label class="control-label">正则:</label>
+                        <input class="form-control" type="text" ng-model="tab3.zz" placeholder="请输入正则表达式">
+                        <label class="control-label">前缀:</label>
+                        <input class="form-control" type="text" ng-model="tab3.seed" placeholder="请输入前缀">
+                        <label class="control-label">数量:</label>
+                        <input class="form-control" type="number" ng-model="tab3.count" placeholder="请输入查询数量">
+
+                        <label class="control-label">rowkey如下:</label>
+
+                        <ol>
+                            <li ng-repeat="obj in tab3.data track by $index">{{obj}}</li>
+
+                        </ol>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="tab-pane" id="tab_4">
+
+                <table class="table table-hover table-bordered" style="width:80%;margin: 0 10%;">
+
+
+                    <tbody>
+                    <tr>
+                        <th>说明</th>
+                        <th>表名</th>
+                        <th>rowkey规则</th>
+                        <th>数据保留时间</th>
+                        <th>版本数量</th>
+                    </tr>
+                    <tr>
+                        <td>指标数据表</td>
+                        <td>hotel:hotel_index_monitor_info</td>
+                        <td>::产品::服务::指标::标签::时间戳</td>
+                        <td>180天</td>
+                        <td>3</td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+    </div>
+
+</section>
+<!-- /.content -->

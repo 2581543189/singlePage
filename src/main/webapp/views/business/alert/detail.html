@@ -1,0 +1,147 @@
+<link rel="stylesheet" href="././resources/js/lib/datepicker/daterangepicker.css">
+
+<link rel="stylesheet" href="././resources/js/lib/angular-plugins/angularjs-pagination/ng-pagination.css">
+
+<style>
+    .popover {
+        max-width: 400px;
+    }
+
+</style>
+
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        详情
+        <small>detail</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="javascript:void(0)"><i class="fa  fa-bell-o"></i> 报警</a></li>
+        <li><a href="javascript:void(0)"><i class="fa  fa-file-text-o"></i> 详情</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content" ng-controller="alertDetailController">
+    <form role="form" class="form-horizontal" style="">
+        <div class="box box-primary">
+            <div class="box-header with-border"></div>
+
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label"> <input type="checkbox" ng-value="true" ng-model="useRecordTime"/>数据采集时间</label>
+
+                    <div class="col-xs-6" ng-show="useRecordTime">
+                        <input id="dataCollectTime" type="text" class="form-control">
+                    </div>
+                    <div class="col-xs-6" ng-show="!useRecordTime"></div>
+                    <div class="col-xs-4">
+                        <button class="btn btn-primary" ng-click="queryAlertDetail()">查询</button>
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label"> <input type="checkbox" ng-value="true" ng-model="useTime"/>报警发送时间</label>
+
+                    <div class="col-xs-6" ng-show="useTime">
+                        <input id="alertTime" type="text" class="form-control">
+                    </div>
+                    <div class="col-xs-6" ng-show="!useTime"></div>
+                    <div class="col-xs-4">
+
+
+                    </div>
+
+                </div>
+
+                <!--<div class="form-group">
+                    <label class="col-xs-2 control-label">标签</label>
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" ng-model="tagName">
+                    </div>
+                    <label class="col-xs-2 control-label">标签值</label>
+                    <div class="col-xs-2">
+                        <input type="text" class="form-control" ng-model="tagValue">
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </form>
+    <div class="box box-primary">
+        <div class="box-header with-border"></div>
+
+        <div class="box-body">
+        <div class="form-group">数据总量:{{totalCount}}</div>
+         
+            <div class="form-group">
+                <table class="table table-hover table-bordered" style="table-layout: fixed;">
+                    <thead>
+                    <tr>
+                        <th>采集时间</th>
+                        <th>报警时间</th>
+                        <th>标签</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat-start="obj in alertList track by $index" ng-init="outerIndex=$index">
+                        <td>{{obj.collectTime}}</td>
+                        <td>{{obj.currentTime}}</td>
+                        <td >
+                            {{obj.tags.length}}个
+                            <a class="glyphicon glyphicon-eye-open" data-toggle="popover" data-html="true"
+                               data-placement="top"
+                               data-content="{{alertValuesHtmls(outerIndex)}}" title="values"
+                               ng-mouseenter="popoverShow($event)"
+                               ng-mouseleave="popoverHide($event)"></a>
+
+
+                        </td>
+
+                        <td>
+                            <a href="javascript:void(0)" ng-click="doToggle(outerIndex)">
+                                <span ng-class="{true: 'fa fa-caret-down', false: 'fa fa-caret-left'}[alertList[outerIndex].showSub]"></span>
+                                &nbsp;详情
+                            </a>
+                        </td>
+                    </tr>
+                    <tr ng-show="alertList[outerIndex].showSub" ng-repeat-end>
+                        <td colspan="4">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>标签</th>
+
+                                    <th>阀值</th>
+                                    <th>实际值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="subObj in alertList[outerIndex].alertDetails track by $index" ng-init="innerIndex=$index">
+                                    <td>{{subObj.tag}}</td>
+                                    <td>{{subObj.desc}}</td>
+                                    <td>{{subObj.current}}</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+
+
+                    </tbody>
+
+                </table>
+                <div class="pager">
+                   <pager page-count="pageCount" current-page="currentPage" on-page-change="onPageChange()" first-text="首页" next-text="下一页" prev-text="上一页" last-text="尾页" show-goto="true" goto-text="跳转到"></pager>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<!-- /.content -->
